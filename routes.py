@@ -6,9 +6,11 @@ from users import is_logged_in
 import groups_main
 import events_main
 
+
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -22,6 +24,7 @@ def login():
         else:
             return render_template("error.html", message="Wrong username or password")
 
+
 @app.route("/logout")
 def logout():
     if not is_logged_in():
@@ -29,6 +32,7 @@ def logout():
         return redirect("/login")
     users.logout()
     return redirect("/")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -47,9 +51,13 @@ def register():
         if len(username) <= 2 or len(username) >= 20:
             return render_template("error.html",
                                    message="The username must be between 3 and 20 characters")
+        
         if len(password1) <= 7 or len(password1) >= 50:
             return render_template("error.html",
-                                   message="The password must be between 8 and 50 characters")     
+                                   message="The password must be between 8 and 50 characters")
+        # if len(password1) <= 7 or len(password1) >= 50:
+        #     return render_template("error.html",
+        #                            message="The password must be between 8 and 50 characters")
         if password1 != password2:
             return render_template("error.html",
                                    message="Passwords do not match")
@@ -58,9 +66,11 @@ def register():
         else:
             return render_template("error.html", message="Registration failed")
 
+
 @app.route("/info")
 def info():
     return render_template("info.html")
+
 
 @app.route("/new_group", methods=["POST"])
 def new_group():
@@ -83,6 +93,7 @@ def new_group():
             return render_template("error.html",
                                    message="Error, creating the group was not successful")
 
+
 @app.route("/join_group", methods=["POST"])
 def join_group():
     users.check_token(request.form["csrf_token"])
@@ -90,7 +101,7 @@ def join_group():
     if not group_id:
         flash("Please provide a group name to join.")
         return render_template("error.html",
-                               message="Error, please select a group to join.")        
+                               message="Error, please select a group to join.")
     if groups_main.join_group(group_id):
         flash("You joined the group")
         return redirect("/groups")
@@ -98,7 +109,8 @@ def join_group():
         flash("You are already in the group or an error occurred")
         return render_template("error.html",
                                message="You are already in the group or an error occurred.")
-        
+
+
 @app.route("/groups")
 def groups():
     if not is_logged_in():
@@ -106,7 +118,8 @@ def groups():
         return redirect("/login")
     my_groups = groups_main.users_all_groups()
     all_groups = groups_main.list_all_groups()
-    return render_template("groups.html",my_groups=my_groups, all_groups=all_groups)  
+    return render_template("groups.html", my_groups=my_groups, all_groups=all_groups)
+
 
 @app.route("/one_group/<int:group_id>")
 def one_group(group_id):
@@ -127,6 +140,7 @@ def one_group(group_id):
                            group_id=group_id,
                            scores=scores)
 
+
 @app.route("/leave_group/<int:group_id>", methods=["POST"])
 def leave_group(group_id):
     if "user_id" not in session:
@@ -139,6 +153,7 @@ def leave_group(group_id):
         flash("Failed to leave the group")
     return redirect("/groups")
 
+
 @app.route("/event_cat", methods=["GET"])
 def event_cat():
     if not is_logged_in():
@@ -146,6 +161,7 @@ def event_cat():
         return redirect("/login")
     all_event_cats = events_main.all_event_cats()
     return render_template("event_cat.html", all_event_cats=all_event_cats)
+
 
 @app.route("/new_event_cat", methods=["POST"])
 def new_event_cat():
@@ -170,6 +186,7 @@ def new_event_cat():
             flash("Error in creating an event category")
             return render_template("error.html", message="Error in creating an event category")
 
+
 @app.route("/events/<int:cat_id>", methods=["GET"])
 def events(cat_id):
     if not is_logged_in():
@@ -183,6 +200,7 @@ def events(cat_id):
                            events_in_cat=events_in_cat,
                            category_name=category_name,
                            cat_id=cat_id)
+
 
 @app.route("/events/<int:cat_id>/new", methods=["POST"])
 def new_event(cat_id):
@@ -218,10 +236,12 @@ def new_event(cat_id):
         return render_template("error.html",
                                message="Error in creating an event")
 
+
 @app.route("/events_for_category/<int:cat_id>")
 def events_for_cateogry(cat_id):
     events = events_main.get_events_by_cateogry(cat_id)
     return jsonify(events)
+
 
 @app.route("/log_event/<int:group_id>", methods=["POST"])
 def log_event(group_id):
@@ -239,4 +259,3 @@ def log_event(group_id):
     else:
         flash("Failed to log the event")
         return redirect(f"/one_group/{group_id}")
-    
