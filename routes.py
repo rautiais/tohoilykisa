@@ -51,8 +51,8 @@ def register():
         if len(username) <= 2 or len(username) >= 20:
             return render_template("error.html",
                                    message="The username must be between 3 and 20 characters")
-        
-        if len(password1) <= 7 or len(password1) >= 50:
+
+        if len(password1) >= 50:
             return render_template("error.html",
                                    message="The password must be between 8 and 50 characters")
         # if len(password1) <= 7 or len(password1) >= 50:
