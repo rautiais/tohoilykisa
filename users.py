@@ -5,12 +5,24 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 
 
+# def login(username, password):
+#     sql = text("""SELECT id, password FROM users
+#                WHERE username=:username""")
+#     result = db.session.execute(sql, {"username": username})
+#     user = result.fetchone()
+#     if user and check_password_hash(user.password, password):
+#         session["user_id"] = user.id
+#         session["username"] = username
+#         session["csrf_token"] = secrets.token_hex(16)
+#         return True
+#     return False
+
 def login(username, password):
     sql = text("""SELECT id, password FROM users
                WHERE username=:username""")
     result = db.session.execute(sql, {"username": username})
     user = result.fetchone()
-    if user and check_password_hash(user.password, password):
+    if user and user.password == password:
         session["user_id"] = user.id
         session["username"] = username
         session["csrf_token"] = secrets.token_hex(16)
@@ -24,14 +36,26 @@ def logout():
     session.pop("csrf_token", None)
 
 
+# def register(username, password):
+#     hash_value = generate_password_hash(password)
+#     username_lower = username.lower()
+#     try:
+#         sql = text("""INSERT INTO users (username, password)
+#                    VALUES (:username, :password)""")
+#         db.session.execute(
+#             sql, {"username": username_lower, "password": hash_value})
+#         db.session.commit()
+#     except:
+#         return False
+#     return login(username_lower, password)
+
 def register(username, password):
-    hash_value = generate_password_hash(password)
     username_lower = username.lower()
     try:
         sql = text("""INSERT INTO users (username, password)
                    VALUES (:username, :password)""")
         db.session.execute(
-            sql, {"username": username_lower, "password": hash_value})
+            sql, {"username": username_lower, "password": password})
         db.session.commit()
     except:
         return False
