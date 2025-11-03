@@ -74,7 +74,7 @@ def info():
 
 @app.route("/new_group", methods=["POST"])
 def new_group():
-    users.check_token(request.form["csrf_token"])
+    #users.check_token(request.form["csrf_token"])
     group_name = request.form["new_group"].strip()
     if len(group_name) < 3 or len(group_name) > 35:
         flash("Group name must be between 3 and 35 characters long")
