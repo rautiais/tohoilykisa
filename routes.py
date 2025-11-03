@@ -126,9 +126,9 @@ def one_group(group_id):
     if not is_logged_in():
         flash("You must be logged in to view this page")
         return redirect("/login")
-    access = groups_main.check_access(group_id)
-    if not access:
-        abort(403)
+    # access = groups_main.check_access(group_id)
+    # if not access:
+    #     abort(403)
     group_users = groups_main.list_users(group_id)
     all_event_cats = events_main.all_event_cats()
     scores = groups_main.calculate_scores(group_id)
