@@ -6,11 +6,11 @@ from users import is_logged_in
 import groups_main
 import events_main
 
-try:
-    with open("passwords.txt", "r", encoding="utf-8") as _pwf:
-        COMMON_PASSWORDS = set(p.strip().lower() for p in _pwf if p.strip())
-except FileNotFoundError:
-    COMMON_PASSWORDS = set()
+# try:
+#     with open("passwords.txt", "r", encoding="utf-8") as _pwf:
+#         COMMON_PASSWORDS = set(p.strip().lower() for p in _pwf if p.strip())
+# except FileNotFoundError:
+#     COMMON_PASSWORDS = set()
 
 
 @app.route("/")
@@ -65,9 +65,9 @@ def register():
         #     return render_template("error.html",
         #                            message="The password must be between 8 and 50 characters")
 
-        if password1.strip().lower() in COMMON_PASSWORDS:
-            return render_template("error.html",
-                                   message="The chosen password is too common; choose a stronger password")
+        # if password1.strip().lower() in COMMON_PASSWORDS:
+        #     return render_template("error.html",
+        #                            message="The chosen password is too common; choose a stronger password")
 
         if password1 != password2:
             return render_template("error.html",
