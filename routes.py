@@ -6,6 +6,12 @@ from users import is_logged_in
 import groups_main
 import events_main
 
+try:
+    with open("passwords.txt", "r", encoding="utf-8") as _pwf:
+        COMMON_PASSWORDS = set(p.strip().lower() for p in _pwf if p.strip())
+except FileNotFoundError:
+    COMMON_PASSWORDS = set()
+
 
 @app.route("/")
 def index():
@@ -58,6 +64,11 @@ def register():
         # if len(password1) <= 7 or len(password1) >= 50:
         #     return render_template("error.html",
         #                            message="The password must be between 8 and 50 characters")
+
+        if password1.strip().lower() in COMMON_PASSWORDS:
+            return render_template("error.html",
+                                   message="The chosen password is too common; choose a stronger password")
+
         if password1 != password2:
             return render_template("error.html",
                                    message="Passwords do not match")
@@ -74,7 +85,7 @@ def info():
 
 @app.route("/new_group", methods=["POST"])
 def new_group():
-    #users.check_token(request.form["csrf_token"])
+    # users.check_token(request.form["csrf_token"])
     group_name = request.form["new_group"].strip()
     if len(group_name) < 3 or len(group_name) > 35:
         flash("Group name must be between 3 and 35 characters long")
