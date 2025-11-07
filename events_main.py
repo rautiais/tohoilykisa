@@ -11,7 +11,7 @@ def check_event_cat(event_cat_name):
     event_cat_id = result.fetchone()
     return event_cat_id[0] if event_cat_id else False
 
-
+    
 def new_event_cat(event_cat_name):
     event_cat_name_lower = event_cat_name.lower()
     try:
@@ -55,7 +55,7 @@ def check_event(event_name):
     event_id = result.fetchone()
     return event_id[0] if event_id else False
 
-
+    
 def new_event(event_name, event_points, cat_id):
     event_name_lower = event_name.lower()
     try:
