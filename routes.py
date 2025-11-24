@@ -47,7 +47,7 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password1 = request.form["password1"]
-        password2 = request.form["password2"]
+        # password2 = request.form["password2"]
         if not users.check_username(username):
             return render_template("error.html",
                                    message="The username is already taken")
@@ -69,9 +69,9 @@ def register():
         #     return render_template("error.html",
         #                            message="The chosen password is too common; choose a stronger password")
 
-        if password1 != password2:
-            return render_template("error.html",
-                                   message="Passwords do not match")
+        # if password1 != password2:
+        #     return render_template("error.html",
+        #                            message="Passwords do not match")
         if users.register(username, password1):
             return redirect("/")
         else:
