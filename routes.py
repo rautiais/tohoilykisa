@@ -61,9 +61,9 @@ def register():
         if len(password1) >= 50:
             return render_template("error.html",
                                    message="The password must be between 8 and 50 characters")
-        # if len(password1) <= 7 or len(password1) >= 50:
-        #     return render_template("error.html",
-        #                            message="The password must be between 8 and 50 characters")
+        if len(password1) <= 7 or len(password1) >= 50:
+            return render_template("error.html",
+                                   message="The password must be between 8 and 50 characters")
 
         # if password1.strip().lower() in COMMON_PASSWORDS:
         #     return render_template("error.html",
